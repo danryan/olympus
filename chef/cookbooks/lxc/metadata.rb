@@ -1,0 +1,5 @@
+maintainer       "CrowdFlower, Inc."
+maintainer_email "sysadmin@crowdflower.com"
+license          "All rights reserved"
+description      "Installs/Configures lxc"
+version          "0.0.1"

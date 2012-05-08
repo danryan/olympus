@@ -1,0 +1,15 @@
+#! /bin/bash
+. `dirname $0`/common
+
+name="Nuke n Pave"
+#
+# nuke and pave the local environment.
+#
+
+echo "** $name **"
+echo "hit ctrl-c now to save the environment"
+sleep 2
+
+vagrant destroy
+attempt vagrant up db
+attempt vagrant up web

@@ -1,0 +1,24 @@
+# -*- ruby -*-
+# vim: ft=ruby
+
+Vagrant::Config.run do |config|
+  config.vagrant.dotfile_name = "vms/state/.host"
+
+  # db must stand up before web - this works correctly with versions
+  # of Vagrant >=0.6.9
+  config.vm.define :host, :primary => true do |host|
+    host.vm.box = "oneiric64"
+    host.vm.forward_port(5432, 8432)
+    host.vm.forward_port(80, 8080)
+    host.vm.network(:hostonly, "172.16.10.10")
+
+    host.vm.provision :chef_solo do |chef|
+      chef.cookbooks_path = "chef/cookbooks"
+      chef.roles_path = "chef/roles"
+      chef.log_level = :debug
+      # chef.log_level = :info
+      chef.add_recipe "lxc::default"
+      chef.add_recipe "lxc::container"
+    end
+  end
+end

@@ -1,0 +1,29 @@
+#! /bin/bash
+. `dirname $0`/common
+
+name="provisioning"
+#
+# "get my environment running as it ought to be"
+# 
+
+# for those who haven't chosen an environment, pick one:
+if !(test -L Vagrantfile)
+then
+  default_env="builder_simple"
+  echo "Setting you up to use $default_env"
+  ln -s vms/$default_env Vagrantfile
+fi
+
+if !(vagrant box list | grep -q "lucid64")
+then
+  echo "Grabbing a base Lucid 64 box"
+  vagrant box add lucid64 http://files.vagrantup.com/lucid64.box
+fi
+
+if vagrant status | grep -q "not created"
+then
+  attempt vagrant up
+else
+  attempt vagrant provision
+fi
+
